@@ -1,3 +1,6 @@
+import urllib.request, requests
+from bs4 import BeautifulSoup
+
 from twilio.rest import TwilioRestClient
 from kivy.app import App
 from kivy.lang import Builder
@@ -107,47 +110,54 @@ sm.add_widget(HomeScreen(name = "home"))
 sm.add_widget(ContactScreen(name = "contacts"))
 sm.add_widget(SettingScreen(name = "setting"))
 
-class AlertifyApp(App):
-
     # Getting location of user
-
-    def location_lookup():
-            site = urllib.request.Request('https://geoiptool.com/', \
+def location_lookup():
+    site = urllib.request.Request('https://geoiptool.com/', \
                               headers = {'User-Agent': 'Mozilla/5.0'})
-            html_content = urllib.request.urlopen(site).read().decode('utf-8')
-            site = BeautifulSoup(html_content, 'html.parser')
+    html_content = urllib.request.urlopen(site).read().decode('utf-8')
+    site = BeautifulSoup(html_content, 'html.parser')
 
-            longitude = str(longitude(site)) # makes string so it's sliceable 
-            longitude = longitude[6:14]
+    longNum = str(longitude(site)) # makes string so it's sliceable 
+    if '-' in longNum:
+        longNum = longNum[6:14]
+    else:
+        longNum = longNum[6:13]
     
-            lat = str(latitude(site)) 
-            lat = lat[6:13]
+    latNum = str(latitude(site))
+    if '-' in latNum:
+        latNum = latNum[6:14]
+    else:
+        latNum = latNum[6:13]
 
-            coordinate = [longitude, lat]
+    coordinate = [longNum, latNum]
     
-            #20 is longitude
-            #17 is latitude
+    #20 is longitude
+    #17 is latitude
     
-            return(coordinate)
-        
-    def longitude(site):
-            i = 0
-            for div_class in site.findAll('div', {'class':'data-item'}):
-                for part in div_class.findAll('span'):
-                    i += 1
-                    if i == 20:
-                        return(part)
+    return(coordinate)
+       
+def longitude(site):
+    i = 0
+    for div_class in site.findAll('div', {'class':'data-item'}):
+        for part in div_class.findAll('span'):
+            i += 1
+            if i == 20:
+                return(part)
 
-        def latitude(site):
-            i = 0
-            for div_class in site.findAll('div', {'class':'data-item'}):
-                for part in div_class.findAll('span'):
-                    i += 1
-                    if i == 18:
-                        return(part)
+def latitude(site):
+    i = 0
+    for div_class in site.findAll('div', {'class':'data-item'}):
+        for part in div_class.findAll('span'):
+            i += 1
+            if i == 18:
+                return(part)
+
+class AlertifyApp(App):
 
     def build(self):
         user_coordinate = location_lookup()       
         return sm
+
+    coordinate = location_lookup()
 
 AlertifyApp().run()
