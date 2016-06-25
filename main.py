@@ -72,10 +72,39 @@ Builder.load_string("""
 			on_press: root.manager.current = 'setting'
 	
 <ContactScreen>:
+	on_pre_enter: root.display_contacts()
 	BoxLayout:
 		orientation: "vertical"
+		Image:
+			size_hint_y: None
+			height: root.height/4
+			width: root.width/4
+			source: "logo.png"
+		Label:
+			id: contact_info
+			text: root.contacts
+			font_size:15
+			pos_hint: {"x":.2, "y":.2}
+			size_hint: .6 , .5
+			background_color: 250,245,0,0.7
 		Button:
+			text: "Add Contact"
+			color: 0,0,0,1
+			font_size: 15
+			pos_hint: {"x":.2, "y":.1}
+			size_hint: .6 , .03
+			background_color: 255,0,0,0.8
 		Button:
+			text: "Back"
+			color: 0,0,0,1
+			font_size: 15
+			pos_hint: {"x":.2, "y":.1}
+			size_hint: .6 , .02
+			background_color: 255,0,0,0.8
+			
+			on_press: root.manager.current = 'home'
+	    
+			
 <SettingScreen>:
 	BoxLayout:
 		size_hint_y: None
@@ -114,12 +143,19 @@ class HomeScreen(Screen):
         auth_token = "0a068601c149167e134887defd6fc2a9" 
         client = TwilioRestClient("ACbb4b9650631364e99781ded800fa9699", \
                               "0a068601c149167e134887defd6fc2a9")
-        client.messages.create(to="+19176671977", from_="+16464193165",
-                                         body="Hello Jia~!")
+        client.messages.create(to="+xxxxxxxxxx", from_="+16464193165",
+                                         body="Hello Ryan~!")
         return
 
 class ContactScreen(Screen):
-    pass
+    contacts = ""
+    def display_contacts(self, *args):
+        text = ""
+        for contact in Contact_Book:
+            text += str(contact) + "\n"
+        self.contacts= text
+        self.ids.contact_info.text= self.contacts
+        
 
 class SettingScreen(Screen):
     curr_radius = "0"
@@ -177,6 +213,7 @@ def latitude(site):
 class AlertifyApp(App):
 
     def build(self):
+        get_data()
         user_coordinate = location_lookup()       
         return sm
 
