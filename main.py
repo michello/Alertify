@@ -1,5 +1,6 @@
 import urllib.request, requests
 from bs4 import BeautifulSoup
+import os
 
 from twilio.rest import TwilioRestClient
 from kivy.app import App
@@ -13,6 +14,27 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scatter import Scatter
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+
+Contact_Book = []
+
+def get_data():
+    if os.path.exists("app_data.csv") == False:
+        return
+    else:
+        with open("app_data.csv") as data_file:
+            for line in data_file:
+                # [name, phonenum, address, longitude, latitude]
+                data_list = line.strip().split(",")
+                Contact_Book.append(data_list)
+        data_file.close()
+
+def store_data():
+    if os.path.exists("app_data.csv") == False:
+        return
+    else:
+        file = open("app_data.csv", "a")
+        file.write("\nsample, sample, sample, sample, sample")
+        file.close()
 
 Builder.load_string("""
 <HomeScreen>:
