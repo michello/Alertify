@@ -1,6 +1,29 @@
 #: kivy 1.0.9
 
-<Alertify>:
-	canvas:
-		Color:
-			rgba: (212, 218, 191)
+<HomeScreen>:
+	BoxLayout:
+		orientation: "vertical"
+		Label:
+			text: "Alert!fy"
+			font_size: 80
+		Button:
+			text: "View Contact"
+			height: 80
+			on_press: root.manager.current = 'contacts'
+		Button:
+			text: "Alert"
+			on_press: root.send_Alert()
+		Button:
+			text: "Setting"
+			on_press: root.manager.current = 'settings'
+	
+<ContactScreen>:
+	BoxLayout:
+		orientation: "vertical"
+		Button:
+		Button:
+<SettingScreen>:
+	BoxLayout:
+		orientation: "vertical"
+		Button:
+		Button:
