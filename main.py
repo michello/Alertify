@@ -28,7 +28,7 @@ def send_Alert(obj):
 def to_setting(obj):
     pass
 
-class Alertify(App):
+class AlertifyApp(App):
     def build(self):
         App_header = BoxLayout(orientation = "vertical")
         logo = Label(text = "Alertify", font_size = 80)
@@ -49,4 +49,4 @@ class Alertify(App):
         App_header.add_widget(setting_button)
         return App_header
 
-Alertify().run()
+AlertifyApp().run()
