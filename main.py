@@ -77,6 +77,9 @@ Builder.load_string("""
 
 # Set up the screens
 class HomeScreen(Screen):
+
+
+    
     '''
     (From the twilio program)
     function to send out alerts to the destination
@@ -105,7 +108,46 @@ sm.add_widget(ContactScreen(name = "contacts"))
 sm.add_widget(SettingScreen(name = "setting"))
 
 class AlertifyApp(App):
+
+    # Getting location of user
+
+    def location_lookup():
+            site = urllib.request.Request('https://geoiptool.com/', \
+                              headers = {'User-Agent': 'Mozilla/5.0'})
+            html_content = urllib.request.urlopen(site).read().decode('utf-8')
+            site = BeautifulSoup(html_content, 'html.parser')
+
+            longitude = str(longitude(site)) # makes string so it's sliceable 
+            longitude = longitude[6:14]
+    
+            lat = str(latitude(site)) 
+            lat = lat[6:13]
+
+            coordinate = [longitude, lat]
+    
+            #20 is longitude
+            #17 is latitude
+    
+            return(coordinate)
+        
+    def longitude(site):
+            i = 0
+            for div_class in site.findAll('div', {'class':'data-item'}):
+                for part in div_class.findAll('span'):
+                    i += 1
+                    if i == 20:
+                        return(part)
+
+        def latitude(site):
+            i = 0
+            for div_class in site.findAll('div', {'class':'data-item'}):
+                for part in div_class.findAll('span'):
+                    i += 1
+                    if i == 18:
+                        return(part)
+
     def build(self):
+        user_coordinate = location_lookup()       
         return sm
 
 AlertifyApp().run()

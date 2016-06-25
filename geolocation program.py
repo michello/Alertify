@@ -14,8 +14,8 @@ def location_lookup():
     lat = str(latitude(site)) 
     lat = lat[6:13]
 
-    coordinate = (long, lat)
-    
+    coordinate = [long, lat]
+
     #20 is longitude
     #17 is latitude
     
