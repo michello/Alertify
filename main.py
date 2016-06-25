@@ -3,6 +3,7 @@ from kivy.app import App
 from kivy.lang import Builder
 
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.image import Image
 from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
@@ -14,12 +15,13 @@ Builder.load_string("""
 <HomeScreen>:
 	BoxLayout:
 		orientation: "vertical"
-		Label:
-			text: "Alert!fy"
-			font_size: 80
+		Image:
+			size_hint_y: None
+			height: root.height/2
+			width: root.width/2
+			source: "logo.png"
 		Button:
 			text: "View Contact"
-			height: 80
 			on_press: root.manager.current = 'contacts'
 		Button:
 			text: "Alert"
@@ -35,7 +37,6 @@ Builder.load_string("""
 		Button:
 <SettingScreen>:
 	BoxLayout:
-		orientation: "vertical"
 		Button:
 		Button:
 """)
@@ -59,7 +60,9 @@ class ContactScreen(Screen):
     pass
 
 class SettingScreen(Screen):
-    pass
+    curr_radius = "0"
+    def update_radius(self, *args):
+        pass
 
 # Add the screens
 sm = ScreenManager()
